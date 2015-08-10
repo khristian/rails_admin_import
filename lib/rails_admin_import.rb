@@ -25,7 +25,7 @@ module RailsAdmin
     module Actions
       class Import < Base
         RailsAdmin::Config::Actions.register(self)
-        
+
         register_instance_option(:collection) do
           true
         end
@@ -39,7 +39,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do          
+          Proc.new do
             # make sure class has import-related methods
             @abstract_model.model.send :include, ::RailsAdminImport::Import
 
@@ -67,11 +67,9 @@ module RailsAdmin
                 results = @abstract_model.model.rails_admin_import({
                   input: params[:upload],
                   type: :upload,
-                  format: params[:input_format].to_sym, 
+                  format: params[:input_format].to_sym,
                   lookup: params[:update_lookup],
-                  associated_map: associated_map,
-                  role: _attr_accessible_role, 
-                  user: _current_user
+                  associated_map: associated_map
                 })
               elsif params[:raw_text]
                 results = @abstract_model.model.rails_admin_import({
@@ -79,9 +77,7 @@ module RailsAdmin
                   type: :raw_text,
                   format: params[:input_format].to_sym,
                   lookup: params[:update_lookup],
-                  associated_map: associated_map,
-                  role: _attr_accessible_role, 
-                  user: _current_user
+                  associated_map: associated_map
                 })
               elsif params[:url]
                 results = @abstract_model.model.rails_admin_import({
@@ -89,9 +85,7 @@ module RailsAdmin
                   type: :url,
                   format: params[:input_format].to_sym,
                   lookup: params[:update_lookup],
-                  associated_map: associated_map,
-                  role: _attr_accessible_role, 
-                  user: _current_user
+                  associated_map: associated_map
                 })
               else
                 results = { :success => [], :error => ["Failed"] }
@@ -99,7 +93,7 @@ module RailsAdmin
 
               @response[:notice]  = results[:success].join("<br />").html_safe  if results[:success].any?
               @response[:error]   = results[:error].join("<br />").html_safe    if results[:error].any?
-          
+
             end
 
             render :action => @action.template_name
